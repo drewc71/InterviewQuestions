@@ -5,7 +5,13 @@ contexpr void swap(int& a, int& b)
   a ^= b ^= a ^= b;
 }
 
-void RadixSort(int* vals, size_t count, int bit = 0x80000000)
+void Negate(int* vals, size_t count)
+{
+  for (int ii = count; ii--;)
+    vals[ii] *= -1;
+}
+
+void RadixSort(int* vals, size_t count, int bit)
 {
   size_t front = 0, back = count-1;
   bool const signBit = (bit == 0x80000000);
@@ -30,13 +36,23 @@ void RadixSort(int* vals, size_t count, int bit = 0x80000000)
       --back;
   }
 
+  if (signBit)
+    Negate(vals + front, count - front);
+  
   bit >>= 1;
   if (bit)
   {
     RadixSort(vals, front, bit);
     RadixSort(vals + front, count - front, bit);
   }
+  
+  if (signBit)
+    Negate(vals + front, count - front);
 }
+
+/*
+
+*/
 
 vector<int> randomArray(size_t count)
 {
